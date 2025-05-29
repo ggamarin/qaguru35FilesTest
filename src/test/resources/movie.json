@@ -1,0 +1,10 @@
+{
+  "name": "The Lord of the Rings: The Fellowship of the Ring",
+  "year": 2001,
+  "genre": "fantasy",
+  "crew": {
+    "director": "Peter Jackson",
+    "leadRole": "Elijah Wood",
+    "music": "Howard Shore"
+  }
+}

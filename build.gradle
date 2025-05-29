@@ -20,7 +20,8 @@ dependencies {
             'com.google.code.gson:gson:2.13.1',
             'com.opencsv:opencsv:5.9',
             "com.fasterxml.jackson.core:jackson-core:2.18.4",
-            'org.assertj:assertj-core:3.27.3')
+            'org.assertj:assertj-core:3.27.3',
+            "com.fasterxml.jackson.core:jackson-databind:2.18.4")
 }
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
