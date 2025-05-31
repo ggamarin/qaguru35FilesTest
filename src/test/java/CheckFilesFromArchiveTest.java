@@ -15,16 +15,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class CheckFilesFromArchiveTest {
     private ClassLoader cl = CheckFilesFromArchiveTest.class.getClassLoader();
+    private static final String zipname = "test.zip";
+    private static final String zipnull = "null.zip";
 
     @Test
     @Tag("FilePasrsing")
     @DisplayName("Проверка .csv файла из архива")
     void shouldCheckCsvFromArchiveTest() throws Exception {
-        try (InputStream is = cl.getResourceAsStream("test.zip");
+        boolean fileFound = false;
+        try (InputStream is = cl.getResourceAsStream(zipname);
              ZipInputStream zis = new ZipInputStream(is)) {
             ZipEntry zipEntry;
             while ((zipEntry = zis.getNextEntry()) != null) {
                 if (zipEntry.getName().endsWith(".csv")) {
+                    fileFound = true;
                     CSVReader csvReader = new CSVReader(new InputStreamReader(zis));
                     List<String[]> content = csvReader.readAll();
                     assertThat(content).contains(
@@ -35,17 +39,20 @@ public class CheckFilesFromArchiveTest {
                 }
             }
         }
+        assertThat(fileFound).as(".csv файл не найден").isTrue();
     }
 
     @Test
     @Tag("FileParsing")
     @DisplayName("Проверка .xls файла из архива")
     void shouldCheckXlsFromArchiveTest() throws Exception {
-        try (InputStream is = cl.getResourceAsStream("test.zip");
+        boolean fileFound = false;
+        try (InputStream is = cl.getResourceAsStream(zipname);
              ZipInputStream zis = new ZipInputStream(is)) {
             ZipEntry zipEntry;
             while ((zipEntry = zis.getNextEntry()) != null) {
                 if (zipEntry.getName().endsWith(".xlsx")) {
+                    fileFound = true;
                     XLS xls = new XLS(zis);
                     String actualString1 = xls.excel.getSheetAt(0).getRow(2).getCell(0).getStringCellValue();
                     String actualString2 = xls.excel.getSheetAt(0).getRow(2).getCell(2).getStringCellValue();
@@ -56,23 +63,27 @@ public class CheckFilesFromArchiveTest {
                 }
             }
         }
+        assertThat(fileFound).as(".xls файл не найден").isTrue();
     }
 
     @Test
     @Tag("FILE_TEST")
     @DisplayName("Проверка pdf файла из архива")
     void shouldCheckPdfFromArchive() throws Exception {
-        try (InputStream is = cl.getResourceAsStream("test.zip");
+        boolean fileFound = false;
+        try (InputStream is = cl.getResourceAsStream(zipname);
              ZipInputStream zis = new ZipInputStream(is)) {
             ZipEntry zipEntry;
             while ((zipEntry = zis.getNextEntry()) != null) {
                 if (zipEntry.getName().endsWith(".pdf")) {
+                    fileFound = true;
                     PDF pdf = new PDF(zis);
                     System.out.println();
                     assertThat(pdf.title).contains("Anatomy of the Somatosensory System");
                     assertThat(pdf.numberOfPages).isEqualTo(4);
                 }
             }
+            assertThat(fileFound).as(".pdf файл не найден").isTrue();
         }
     }
 }
